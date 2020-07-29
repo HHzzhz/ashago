@@ -6,10 +6,12 @@ import javax.persistence.Id
 
 @Entity
 class User(
-        var email: String,
+        var userId: String,
+        var userIdType: String = "email",
         var token: String,
-        var subscribed : Boolean,
-        var nickName:String,
+        var subscribed : Boolean?,
+        var userName:String?,
+        var activated: Boolean?,
         @Id @GeneratedValue var id: Int? = null
 ) {
 }

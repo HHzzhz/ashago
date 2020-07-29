@@ -5,7 +5,8 @@ import com.ashago.ashago.resp.CommonResp
 import com.ashago.ashago.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import javax.validation.constraints.Email
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 @CrossOrigin
@@ -14,18 +15,17 @@ class UserController
         private val userService: UserService
 ) {
 
-    @RequestMapping("/users", method = [RequestMethod.POST])
+    @RequestMapping("/user/register", method = [RequestMethod.POST])
     fun signUp(@RequestBody user: User): CommonResp {
         return userService.signUp(user);
     }
 
-    @RequestMapping("/users/{email}:login", method = [RequestMethod.POST])
-    fun login(@RequestBody user: User, @PathVariable("email") email: String): CommonResp {
-        if (email != user.email) {
-            return CommonResp("E002", "email not verified")
-        }
-
-        return userService.login(user)
+    @RequestMapping("/user/login", method = [RequestMethod.POST])
+    fun login(@RequestBody user: User, response: HttpServletResponse): CommonResp {
+        val resp: CommonResp = userService.login(user)
+        val cookie: Cookie = Cookie("sessionId", resp.getData("sessionId").toString())
+        response.addCookie(cookie)
+        return resp
     }
 
 }
