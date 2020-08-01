@@ -23,7 +23,7 @@ class UserController
     @RequestMapping("/user/login", method = [RequestMethod.POST])
     fun login(@RequestBody user: User, response: HttpServletResponse): CommonResp {
         val resp: CommonResp = userService.login(user)
-        val cookie: Cookie = Cookie("sessionId", resp.getData("sessionId").toString())
+        val cookie = Cookie("sessionId", resp.getData("sessionId").toString())
         response.addCookie(cookie)
         return resp
     }
